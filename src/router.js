@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Automatons from './views/Automatons.vue'
-import NewAutomaton from './views/NewAutomaton.vue'
+import Automatons from './views/automatons/Automatons.vue'
+import NewAutomaton from './views/automatons/NewAutomaton.vue'
+import Automaton from './views/automatons/Automaton.vue'
 import Login from './views/Login.vue'
 import Signin from './views/Signin.vue'
 
@@ -30,6 +31,14 @@ const router = new Router({
       path: '/automatons/new',
       name: 'newautomaton',
       component: NewAutomaton,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/automatons/:automatonId',
+      name: 'automaton',
+      component: Automaton,
       meta: {
         requiresAuth: true
       }
