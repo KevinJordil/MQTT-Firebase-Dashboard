@@ -1,7 +1,6 @@
 <template>
   <div class="container home">
-    <h1>Accueil</h1>
-    <p>user : {{ user }}</p>
+    <h1 class="title">Accueil</h1>
   </div>
 </template>
 
