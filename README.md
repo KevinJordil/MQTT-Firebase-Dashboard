@@ -1,4 +1,4 @@
-# firebrok
+# MQTT-Firebase-Dashboard
 
 ## Project setup
 ```
