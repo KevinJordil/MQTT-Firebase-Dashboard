@@ -1,9 +1,10 @@
 <template>
   <div class="container automatons">
-    <div class="column">
+    <br>
+    <h1 class="title">Listes des automates</h1>
       <b-table :data="automatons">
         <template slot-scope="props">
-          <b-table-column field="name" label="Nom de l'automate">{{ props.row.name }}</b-table-column>
+          <b-table-column field="name" label="Nom de l'automate"><router-link :to="{name: 'automaton', params : {automatonId: props.row.id}}">{{ props.row.name }}</router-link></b-table-column>
           <b-table-column
             field="created_at"
             label="Créé le"
@@ -27,12 +28,11 @@
       <b-field grouped position="is-right">
         <router-link :to="{name: 'newautomaton'}" class="button is-primary">Nouvel automate</router-link>
       </b-field>
-    </div>
   </div>
 </template>
 
 <script>
-import { fire } from "../components/firebase.js"
+import { fire } from "../../components/firebase.js"
 
 export default {
   name: "Automatons",
