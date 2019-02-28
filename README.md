@@ -1,9 +1,10 @@
-# firebrok
+# MQTT-Firebase-Dashboard
 
 ## Project setup
 ```
 npm install
 ```
+Add your firebase config in the [/src/components/firebase.js](https://github.com/KevinJordil/MQTT-Firebase-Dashboard/blob/master/src/components/firebase.js)
 
 ### Compiles and hot-reloads for development
 ```
@@ -14,16 +15,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
