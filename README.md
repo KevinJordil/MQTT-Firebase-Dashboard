@@ -4,7 +4,7 @@
 ```
 npm install
 ```
-Add the components/firebase.js file that is present in the common share (N:)
+Add your firebase config in the [/src/components/firebase.js](https://github.com/KevinJordil/MQTT-Firebase-Dashboard/blob/master/src/components/firebase.js)
 
 ### Compiles and hot-reloads for development
 ```
