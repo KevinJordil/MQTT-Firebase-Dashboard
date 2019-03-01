@@ -14,13 +14,15 @@
 
       <div class="navbar-end">
         <div class="navbar-item">
-          <img :src="user.photoURL">
-          <p>{{ user.displayName }}</p>
-          <div class="buttons">
-            <button @click="SignOut" class="button is-light">
-              Deconnexion
-            </button>
-          </div>
+          <b-dropdown aria-role="list" position="is-bottom-left">
+            <a class="navbar-item" slot="trigger" role="button">
+              <img :src="user.photoURL">
+              <span>  {{ user.displayName }}</span>
+              <b-icon icon="menu-down"></b-icon>
+            </a>
+
+            <b-dropdown-item aria-role="listitem" @click="SignOut">Deconnexion</b-dropdown-item>
+          </b-dropdown>
         </div>
       </div>
     </div>
@@ -28,14 +30,14 @@
 </template>
 
 <script>
-import { fire } from "../../components/firebase.js"
+import { fire } from "../../components/firebase.js";
 
 export default {
   name: "NavLogged",
-  data (){
-    return{
-      user: ''
-    }
+  data() {
+    return {
+      user: ""
+    };
   },
   methods: {
     SignOut() {
@@ -46,7 +48,7 @@ export default {
     }
   },
   mounted: async function() {
-    this.user = await fire.auth().currentUser
+    this.user = await fire.auth().currentUser;
   }
 };
 </script>
