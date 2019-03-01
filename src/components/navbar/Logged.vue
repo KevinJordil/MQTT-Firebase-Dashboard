@@ -14,6 +14,8 @@
 
       <div class="navbar-end">
         <div class="navbar-item">
+          <img :src="user.photoURL">
+          <p>{{ user.displayName }}</p>
           <div class="buttons">
             <button @click="SignOut" class="button is-light">
               Deconnexion
@@ -30,6 +32,11 @@ import { fire } from "../../components/firebase.js"
 
 export default {
   name: "NavLogged",
+  data (){
+    return{
+      user: ''
+    }
+  },
   methods: {
     SignOut() {
       fire
@@ -37,6 +44,9 @@ export default {
         .signOut()
         .then(() => {});
     }
+  },
+  mounted: async function() {
+    this.user = await fire.auth().currentUser
   }
 };
 </script>
