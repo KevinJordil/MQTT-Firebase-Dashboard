@@ -5,7 +5,7 @@
       <b-message title="Erreur" :closable="false" type="is-danger" has-icon>L'automate n'existe pas</b-message>
     </div>
     <div v-else-if="!automaton">
-      <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
+      <b-message title="Chargement" :closable="false" type="is-info" has-icon>L'automate est en cours de chargement ...</b-message>
     </div>
     <div v-else>
       <h1 class="title">Automate {{ automaton.name }}</h1>
@@ -63,7 +63,6 @@ export default {
   name: "Automaton",
   data() {
     return {
-      isLoading: false,
       exist: true,
       automaton: "",
       topics: [],
@@ -76,11 +75,7 @@ export default {
           this.topic = name
       }
   },
-  mounted: function() {
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 60 * 1000);
+  mounted: () => {
     fire
       .firestore()
       .collection("automatons")
