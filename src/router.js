@@ -13,6 +13,7 @@ import { fire } from "./components/firebase.js";
 
 const router = new Router({
   mode: 'history',
+  base: 'MQTT-Firebase-Dashboard',
   routes: [
     {
       path: '/',
