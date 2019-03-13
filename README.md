@@ -22,6 +22,14 @@ npm run serve
 npm run build
 ```
 
+### Deploy build on Github
+
+`npm run build`
+`git add .`
+`git commit -m "Update project"`
+`git push`
+`git subtree push --prefix dist origin gh-pages`
+
 ## Packages
 
 * [Buefy](https://buefy.org/documentation) for styles
