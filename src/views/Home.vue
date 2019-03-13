@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import { fire } from "../components/firebase.js"
+import { fire } from "../components/firebase.js";
 
 export default {
   name: "Home",
   data() {
-    return{
+    return {
       user: fire.auth().currentUser
-    }
+    };
   }
 };
 </script>
