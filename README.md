@@ -15,3 +15,10 @@ npm run serve
 ```
 npm run build
 ```
+
+## Packages
+
+* [Buefy](https://buefy.org/documentation) for styles
+* [VeeValidate](https://baianat.github.io/vee-validate) for validate forms
+* [Vue-graph](https://github.com/juijs/vue-graph) for graph
+* [Vue-slider-component](https://github.com/NightCatSama/vue-slider-component) for vue slider
