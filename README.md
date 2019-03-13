@@ -1,5 +1,9 @@
 # MQTT-Firebase-Dashboard
 
+## Live
+
+[Live version](https://kevinjordil.github.io/MQTT-Firebase-Dashboard/)
+
 ## Versions
 
 * Vue 3.4.0
