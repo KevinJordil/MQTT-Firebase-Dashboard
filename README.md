@@ -1,5 +1,11 @@
 # MQTT-Firebase-Dashboard
 
+## Versions
+
+* Vue 3.4.0
+* Npm 6.8.0
+* Node 10.15.2
+
 ## Project setup
 ```
 npm install
