@@ -5,7 +5,12 @@
       <b-message title="Erreur" :closable="false" type="is-danger" has-icon>L'automate n'existe pas</b-message>
     </div>
     <div v-else-if="!automaton">
-      <b-message title="Chargement" :closable="false" type="is-info" has-icon>L'automate est en cours de chargement ...</b-message>
+      <b-message
+        title="Chargement"
+        :closable="false"
+        type="is-info"
+        has-icon
+      >L'automate est en cours de chargement ...</b-message>
     </div>
     <div v-else>
       <h1 class="title">Automate {{ automaton.name }}</h1>
@@ -35,23 +40,41 @@
           >{{ new Date(props.row.updated_at.toDate()).toLocaleDateString() }}</b-table-column>
         </template>
       </b-table>
-    <b-table v-if="fluxTopic" :data="fluxTopic">
-        <template slot-scope="props">
-          <b-table-column field="name" label="Nom du topic">
-            {{ props.row.name }}
-          </b-table-column>
-          <b-table-column
-            field="created_at"
-            label="Créé le"
-            centered
-          >{{ new Date(props.row.created_at.toDate()).toLocaleDateString() }}</b-table-column>
-          <b-table-column
-            field="updated_at"
-            label="Dernière donnée reçue"
-            centered
-          >{{ new Date(props.row.updated_at.toDate()).toLocaleDateString() }}</b-table-column>
-        </template>
-      </b-table>
+      <div v-if="topic.length > 0">
+        <br>
+        <b-dropdown aria-role="list">
+          <button class="button is-primary" slot="trigger">
+            <span>Graphique</span>
+            <b-icon icon="menu-down"></b-icon>
+          </button>
+          <b-dropdown-item aria-role="listitem" @click="selectGraph('graphbar')">Graphique en barres</b-dropdown-item>
+          <b-dropdown-item
+            aria-role="listitem"
+            @click="selectGraph('graphbubblecloud')"
+          >Graphique en bulles</b-dropdown-item>
+        </b-dropdown>
+        <graph-bar
+          v-if="graphbar"
+          :height="400"
+          :axis-min="0"
+          :axis-max="Math.max.apply(null, fluxTopicGraphData)"
+          :labels="labelsFluxTopic"
+          :values="fluxTopicGraphData"
+        >
+          <tooltip :names="labelsFluxTopic" :position="'top'"></tooltip>
+        </graph-bar>
+        <graph-bubblecloud
+          v-if="graphbubblecloud"
+          :height="800"
+          :colors="colors"
+          :style="styles"
+          :values="fluxTopicBubbleData"
+        ></graph-bubblecloud>
+        <div v-if="graphselected()">
+          <p>Nombre de données</p>
+          <vue-slider v-model="numberData" :min="2" :max="fluxTopic.length"></vue-slider>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -66,14 +89,97 @@ export default {
       exist: true,
       automaton: "",
       topics: [],
-      topic: '',
-      fluxTopic: []
+      topic: "",
+      graphbar: false,
+      graphbubblecloud: false,
+      numberData: 2,
+      colors: () => {
+        return "#7977C2";
+      },
+      styles: {
+        titleFontSize: 15,
+        titleFontWeight: "bold"
+      },
+      fluxTopic: [],
+      labelsFluxTopic: [],
+      fluxTopicGraphData: [],
+      fluxTopicBubbleData: []
     };
   },
-  methods:{
-      selectTopic(name){
-          this.topic = name
+  methods: {
+    selectTopic(name) {
+      this.numberData = 2;
+      this.topic = name;
+      this.$bind(
+        "fluxTopic",
+        fire
+          .firestore()
+          .collection("automatons")
+          .doc(this.$route.params.automatonId)
+          .collection("topics")
+          .doc(name)
+          .collection("flux")
+          .orderBy("timestamp", "desc")
+      );
+    },
+    selectGraph(type) {
+      this.graphbar = false;
+      this.graphbubblecloud = false;
+      switch (type) {
+        case "graphbar":
+          this.graphbar = true;
+          break;
+        case "graphbubblecloud":
+          this.graphbubblecloud = true;
+          break;
+        default:
+        // Nothing
       }
+    },
+    setGraphData(data, max) {
+      if (max) {
+        this.fluxTopicGraphData = data
+          .slice(0, max)
+          .map(({ message }) => parseFloat(message))
+          .reverse();
+      } else {
+        this.fluxTopicGraphData = data
+          .map(({ message }) => parseFloat(message))
+          .reverse();
+      }
+
+      this.labelsFluxTopic = new Array(this.fluxTopicGraphData.length);
+    },
+    setBubbleData(data, max) {
+      if (max) {
+        this.fluxTopicBubbleData = data
+          .slice(0, max)
+          .map(({ message }) => [parseFloat(message), parseFloat(message)]);
+      } else {
+        this.fluxTopicBubbleData = data.map(({ message }) => [
+          parseFloat(message),
+          parseFloat(message)
+        ]);
+      }
+    },
+    graphselected(){
+      if(this.graphbar || this.graphbubblecloud){
+        return true
+      }
+      else{
+        return false
+      }
+    }
+  },
+  watch: {
+    fluxTopic: function(data) {
+      this.setGraphData(data, this.numberData);
+      this.setBubbleData(data, this.numberData);
+    },
+    numberData: function(numberData) {
+      this.setGraphData(this.fluxTopic, numberData);
+      this.setBubbleData(this.fluxTopic, numberData);
+    }
   },
   mounted: () => {
     fire
