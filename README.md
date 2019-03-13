@@ -1,8 +1,8 @@
 # MQTT-Firebase-Dashboard
 
-## Live
+## Live version
 
-[Live version](https://kevinjordil.github.io/MQTT-Firebase-Dashboard/)
+[Lien](https://kevinjordil.github.io/MQTT-Firebase-Dashboard/)
 
 ## Versions
 
