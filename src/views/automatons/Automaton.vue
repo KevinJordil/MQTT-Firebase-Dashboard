@@ -112,7 +112,7 @@ export default {
       this.topic = name;
       this.$bind(
         "fluxTopic",
-        fire
+        firebase
           .firestore()
           .collection("automatons")
           .doc(this.$route.params.automatonId)
