@@ -52,10 +52,6 @@
             aria-role="listitem"
             @click="selectGraph('graphline')"
           >Graphique en lignes</b-dropdown-item>
-          <b-dropdown-item
-            aria-role="listitem"
-            @click="selectGraph('graphbubblecloud')"
-          >Graphique en bulles</b-dropdown-item>
         </b-dropdown>
         <graph-bar
           v-if="graphbar"
@@ -80,18 +76,9 @@
         >
           <guideline :tooltip-y="true"></guideline>
         </graph-area>
-
-        <graph-bubblecloud
-          v-if="graphbubblecloud"
-          :height="800"
-          :colors="colors"
-          :style="styles"
-          :values="fluxTopicBubbleData"
-        ></graph-bubblecloud>
-
         <div v-if="graphselected()">
           <p>Nombre de données</p>
-          <vue-slider v-model="numberData" :min="2" :max="fluxTopic.length"></vue-slider>
+          <vue-slider v-model="numberData" :min="0" :min-range="2" :max="fluxTopic.length" :enable-cross="false" direction="rtl"></vue-slider>
         </div>
       </div>
     </div>
@@ -111,8 +98,7 @@ export default {
       topic: "",
       graphbar: false,
       graphline: false,
-      graphbubblecloud: false,
-      numberData: 2,
+      numberData: [0, 2],
       colors: () => {
         return "#7977C2";
       },
@@ -128,7 +114,7 @@ export default {
   },
   methods: {
     selectTopic(name) {
-      this.numberData = 2;
+      this.numberData = [0, 2];
       this.topic = name;
       this.$bind(
         "fluxTopic",
@@ -145,7 +131,6 @@ export default {
     selectGraph(type) {
       this.graphbar = false;
       this.graphline = false;
-      this.graphbubblecloud = false;
       switch (type) {
         case "graphbar":
           this.graphbar = true;
@@ -153,19 +138,16 @@ export default {
         case "graphline":
           this.graphline = true;
           break;
-        case "graphbubblecloud":
-          this.graphbubblecloud = true;
-          break;
         default:
         // Nothing
       }
     },
-    setGraphData(data, max) {
-      if (max) {
+    setGraphData(data, numberData) {
+      if (numberData) {
         this.fluxTopicGraphData = data
-          .slice(0, max)
-          .map(({ message }) => parseFloat(message))
-          .reverse();
+          .slice(numberData[0], numberData[1])
+          .map(({ message, timestamp }) => parseFloat(message))
+          .reverse()
       } else {
         this.fluxTopicGraphData = data
           .map(({ message }) => parseFloat(message))
@@ -174,20 +156,8 @@ export default {
 
       this.labelsFluxTopic = new Array(this.fluxTopicGraphData.length);
     },
-    setBubbleData(data, max) {
-      if (max) {
-        this.fluxTopicBubbleData = data
-          .slice(0, max)
-          .map(({ message }) => [parseFloat(message), parseFloat(message)]);
-      } else {
-        this.fluxTopicBubbleData = data.map(({ message }) => [
-          parseFloat(message),
-          parseFloat(message)
-        ]);
-      }
-    },
     graphselected() {
-      if (this.graphbar || this.graphbubblecloud || this.graphline) {
+      if (this.graphbar || this.graphline) {
         return true;
       } else {
         return false;
@@ -197,11 +167,9 @@ export default {
   watch: {
     fluxTopic: function(data) {
       this.setGraphData(data, this.numberData);
-      this.setBubbleData(data, this.numberData);
     },
     numberData: function(numberData) {
       this.setGraphData(this.fluxTopic, numberData);
-      this.setBubbleData(this.fluxTopic, numberData);
     }
   },
   mounted: () => {
