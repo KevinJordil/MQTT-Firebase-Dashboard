@@ -17,7 +17,7 @@
         :message="errors.first('description')"
       >
         <b-input
-          data-vv-as="Mot de passe"
+          data-vv-as="Description"
           v-model="description"
           type="textarea"
           name="description"
@@ -28,6 +28,7 @@
         <button type="submit" class="button is-primary">Création</button>
       </b-field>
     </form>
+    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
 
@@ -38,11 +39,18 @@ export default {
   name: "NewAutomaton",
   data() {
     return {
+      isLoading: false,
       name: "",
       description: ""
     };
   },
   methods: {
+    openLoading() {
+      this.isLoading = true;
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 120 * 1000);
+    },
     async createAutomaton() {
       fire
         .app()
@@ -59,11 +67,14 @@ export default {
             }<br><strong>Mot de passe : </strong>${result.data.automatonId}`,
             confirmText: "OK, j'ai noté !"
           });
+          this.isLoading = false;
+          this.$router.push({name: 'automatons'}) 
         });
     },
     async validateBeforeSubmit() {
       let result = await this.$validator.validateAll();
       if (result) {
+        this.openLoading();
         await this.createAutomaton();
         return;
       }
