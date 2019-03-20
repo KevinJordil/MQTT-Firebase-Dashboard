@@ -2,7 +2,6 @@
   <div>
     <NavLogged v-if="authenticated != null"></NavLogged>
     <NavNotLogged v-else></NavNotLogged>
-    <router-view name="navbar"/>
     <router-view/>
   </div>
 </template>
