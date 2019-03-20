@@ -145,7 +145,7 @@ export default {
       if (numberData) {
         this.fluxTopicGraphData = data
           .slice(numberData[0], numberData[1])
-          .map(({ message, timestamp }) => parseFloat(message))
+          .map(({ message }) => parseFloat(message))
           .reverse()
       } else {
         this.fluxTopicGraphData = data
