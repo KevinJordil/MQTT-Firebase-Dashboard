@@ -59,7 +59,7 @@ export default {
             .auth()
             .signInWithEmailAndPassword(this.email, this.password);
           this.$toast.open({
-            message: "Logged",
+            message: "Authentification réussie",
             type: "is-success"
           });
           this.$router.push({name: 'automatons'})
