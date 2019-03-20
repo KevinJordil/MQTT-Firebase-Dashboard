@@ -50,6 +50,10 @@
           <b-dropdown-item aria-role="listitem" @click="selectGraph('graphbar')">Graphique en barres</b-dropdown-item>
           <b-dropdown-item
             aria-role="listitem"
+            @click="selectGraph('graphline')"
+          >Graphique en lignes</b-dropdown-item>
+          <b-dropdown-item
+            aria-role="listitem"
             @click="selectGraph('graphbubblecloud')"
           >Graphique en bulles</b-dropdown-item>
         </b-dropdown>
@@ -63,6 +67,20 @@
         >
           <tooltip :names="labelsFluxTopic" :position="'top'"></tooltip>
         </graph-bar>
+
+        <graph-area
+          v-if="graphline"
+          :height="400"
+          :shape="'normal'"
+          :axis-min="0"
+          :axis-max="Math.max.apply(null, fluxTopicGraphData)"
+          :axis-full-mode="true"
+          :labels="labelsFluxTopic"
+          :values="fluxTopicGraphData"
+        >
+          <guideline :tooltip-y="true"></guideline>
+        </graph-area>
+
         <graph-bubblecloud
           v-if="graphbubblecloud"
           :height="800"
@@ -70,6 +88,7 @@
           :style="styles"
           :values="fluxTopicBubbleData"
         ></graph-bubblecloud>
+
         <div v-if="graphselected()">
           <p>Nombre de données</p>
           <vue-slider v-model="numberData" :min="2" :max="fluxTopic.length"></vue-slider>
@@ -91,6 +110,7 @@ export default {
       topics: [],
       topic: "",
       graphbar: false,
+      graphline: false,
       graphbubblecloud: false,
       numberData: 2,
       colors: () => {
@@ -112,7 +132,7 @@ export default {
       this.topic = name;
       this.$bind(
         "fluxTopic",
-        firebase
+        fire
           .firestore()
           .collection("automatons")
           .doc(this.$route.params.automatonId)
@@ -124,10 +144,14 @@ export default {
     },
     selectGraph(type) {
       this.graphbar = false;
+      this.graphline = false;
       this.graphbubblecloud = false;
       switch (type) {
         case "graphbar":
           this.graphbar = true;
+          break;
+        case "graphline":
+          this.graphline = true;
           break;
         case "graphbubblecloud":
           this.graphbubblecloud = true;
@@ -162,12 +186,11 @@ export default {
         ]);
       }
     },
-    graphselected(){
-      if(this.graphbar || this.graphbubblecloud){
-        return true
-      }
-      else{
-        return false
+    graphselected() {
+      if (this.graphbar || this.graphbubblecloud || this.graphline) {
+        return true;
+      } else {
+        return false;
       }
     }
   },
