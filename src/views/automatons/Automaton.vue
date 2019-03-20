@@ -78,7 +78,7 @@
         </graph-area>
         <div v-if="graphselected()">
           <p>Nombre de données</p>
-          <vue-slider v-model="numberData" :min="0" :min-range="2" :max="fluxTopic.length" :enable-cross="false" direction="rtl"></vue-slider>
+          <vue-slider v-model="numberData" :min="0" :min-range="2" :max-range="200" :max="fluxTopic.length" :enable-cross="false" direction="rtl"></vue-slider>
         </div>
       </div>
     </div>
@@ -109,7 +109,6 @@ export default {
       fluxTopic: [],
       labelsFluxTopic: [],
       fluxTopicGraphData: [],
-      fluxTopicBubbleData: []
     };
   },
   methods: {
