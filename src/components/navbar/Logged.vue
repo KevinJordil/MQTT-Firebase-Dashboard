@@ -54,7 +54,7 @@ export default {
           .signOut()
           .then(() => {});
       } catch (e) {
-        console.log(e);
+        // catch error
       }
     }
   },

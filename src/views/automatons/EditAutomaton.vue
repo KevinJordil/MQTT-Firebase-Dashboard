@@ -129,7 +129,7 @@ export default {
           },
           { merge: true }
         )
-        .then(data => {
+        .then(() => {
           this.$toast.open({
             message: "Automate mis à jour avec succès",
             type: "is-success"
@@ -150,7 +150,7 @@ export default {
           },
           { merge: true }
         )
-        .then(data => {
+        .then(() => {
           this.$toast.open({
             message: "Utilisateur ajouté avec succès",
             type: "is-success"
