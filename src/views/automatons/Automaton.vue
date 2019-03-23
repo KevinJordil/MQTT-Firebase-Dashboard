@@ -76,7 +76,8 @@
         >
           <guideline :tooltip-y="true"></guideline>
         </graph-area>
-        <div v-if="graphselected()">
+        <div v-if="graphselected()">    
+          <p>Du {{ sliderDate[1] }} à {{ sliderDate[0] }}</p>
           <p>Nombre de données</p>
           <vue-slider v-model="numberData" :min="0" :min-range="2" :max-range="200" :max="fluxTopic.length" :enable-cross="false" direction="rtl"></vue-slider>
         </div>
@@ -99,6 +100,7 @@ export default {
       graphbar: false,
       graphline: false,
       numberData: [0, 2],
+      sliderDate: [],
       colors: () => {
         return "#7977C2";
       },
@@ -152,6 +154,12 @@ export default {
           .map(({ message }) => parseFloat(message))
           .reverse();
       }
+
+      let tempDate = new Date(data[numberData[0]].timestamp.toDate())
+      this.sliderDate[0] = `${tempDate.getDate()}/${tempDate.getMonth()}/${tempDate.getFullYear()} ${tempDate.getHours()}:${tempDate.getMinutes()}:${tempDate.getSeconds()}`
+      
+      tempDate = new Date(data[numberData[1]].timestamp.toDate())
+      this.sliderDate[1] = `${tempDate.getDate()}/${tempDate.getMonth()}/${tempDate.getFullYear()} ${tempDate.getHours()}:${tempDate.getMinutes()}:${tempDate.getSeconds()}`
 
       this.labelsFluxTopic = new Array(this.fluxTopicGraphData.length);
     },
