@@ -47,12 +47,11 @@ export default {
         confirmText: "OK, j'ai noté !"
       });
     },
-    SignOut() {
+    async SignOut() {
       try {
-        fire
+        await fire
           .auth()
-          .signOut()
-          .then(() => {});
+          .signOut();
       } catch (e) {
         // catch error
       }
