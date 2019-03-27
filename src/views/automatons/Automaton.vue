@@ -40,6 +40,7 @@
           >{{ new Date(props.row.updated_at.toDate()).toLocaleDateString() }}</b-table-column>
         </template>
       </b-table>
+      <p v-if="topic.length == 0 && topics.length > 0" class="help has-text-grey is-italic">Cliquer sur un topic pour afficher ses valeurs</p>
       <div v-if="topic.length > 0">
         <br>
         <b-dropdown aria-role="list">
@@ -53,6 +54,13 @@
             @click="selectGraph('graphline')"
           >Graphique en lignes</b-dropdown-item>
         </b-dropdown>
+        <p v-if="!graphselected()" class="help has-text-grey is-italic">Choisissez un graphique via le menu déroulant ci-dessus</p>
+        <br><br>
+        <div v-if="graphselected()">    
+          <p>Données affichées comprise entre le <strong>{{ sliderDate[1] }}</strong> et le <strong>{{ sliderDate[0] }}</strong></p><br>
+          <p class="subtitle">Selection de la plage de données du topic <strong>{{ topic }}</strong></p>
+          <vue-slider v-model="numberData" :min="0" :min-range="2" :max-range="200" :max="fluxTopic.length" :enable-cross="false" direction="rtl"></vue-slider>
+        </div>
         <graph-bar
           v-if="graphbar"
           :height="400"
@@ -76,11 +84,6 @@
         >
           <guideline :tooltip-y="true"></guideline>
         </graph-area>
-        <div v-if="graphselected()">    
-          <p>Du {{ sliderDate[1] }} à {{ sliderDate[0] }}</p>
-          <p>Nombre de données</p>
-          <vue-slider v-model="numberData" :min="0" :min-range="2" :max-range="200" :max="fluxTopic.length" :enable-cross="false" direction="rtl"></vue-slider>
-        </div>
       </div>
     </div>
   </div>
