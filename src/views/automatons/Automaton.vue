@@ -161,7 +161,7 @@ export default {
       let tempDate = new Date(data[numberData[0]].timestamp.toDate())
       this.sliderDate[0] = `${tempDate.getDate()}/${tempDate.getMonth()+1}/${tempDate.getFullYear()} ${tempDate.getHours()}:${tempDate.getMinutes()}:${tempDate.getSeconds()}`
       
-      tempDate = new Date(data[numberData[1]].timestamp.toDate())
+      tempDate = new Date(data[numberData[1]-1].timestamp.toDate())
       this.sliderDate[1] = `${tempDate.getDate()}/${tempDate.getMonth()+1}/${tempDate.getFullYear()} ${tempDate.getHours()}:${tempDate.getMinutes()}:${tempDate.getSeconds()}`
 
       this.labelsFluxTopic = new Array(this.fluxTopicGraphData.length);
